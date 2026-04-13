@@ -71,6 +71,7 @@ Model poisoning attacks here, main untargeted attacks, refer to the attacks aime
 <!-- prettier-ignore -->
 | Name | Source File | Paper | Base Algorithm | Applicable Algorithms |
 |:---:|:---:|:---:|:---:|:---:|
+| HIDRA Attack | [hidra.py](attackers/hidra.py) | [Attacking Byzantine Robust Aggregation in High Dimensions](https://ieeexplore.ieee.org/document/10646844) - IEEE S&P '24 | FedSGD | FedSGD, [FedOpt, FedAvg] |
 | Mimic Attack | [mimic.py](attackers/mimic.py) | [Byzantine-Robust Learning on Heterogeneous Datasets via Bucketing](https://openreview.net/forum?id=jXKKDEi5vJt) - ICLR '22 | FedSGD | FedSGD, [FedOpt, FedAvg] |
 | Min-Max attack | [min.py](attackers/min.py) | [Manipulating the Byzantine: Optimizing Model Poisoning Attacks and Defenses for Federated Learning](https://www.ndss-symposium.org/ndss-paper/manipulating-the-byzantine-optimizing-model-poisoning-attacks-and-defenses-for-federated-learning/) - NDSS '21 | FedSGD | FedSGD, [FedOpt, FedAvg] |
 | Min-Sum attack | [min.py](attackers/min.py) | [Manipulating the Byzantine: Optimizing Model Poisoning Attacks and Defenses for Federated Learning](https://www.ndss-symposium.org/ndss-paper/manipulating-the-byzantine-optimizing-model-poisoning-attacks-and-defenses-for-federated-learning/) - NDSS '21 | FedSGD | FedSGD, [FedOpt, FedAvg] |
