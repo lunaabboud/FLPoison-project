@@ -87,6 +87,7 @@ Model poisoning attacks here, main untargeted attacks, refer to the attacks aime
 | Name | Source File | Paper |  Base Algorithm | Applicable Algorithms |
 |:---:|:---:|:---:|:---:|:---:|
 | LASA |[lasa.py](aggregators/lasa.py)|[Achieving Byzantine-Resilient Federated Learning via Layer-Adaptive Sparsified Model Aggregation](https://arxiv.org/pdf/2409.01435) - WACV '25 | FedOpt | FedSGD, [FedOpt, FedAvg] |
+| FedSign |[fedsign.py](aggregators/lasa.py)|[FedSIGN: A sign-based federated learning framework with privacy and robustness guarantees](https://www.sciencedirect.com/science/article/abs/pii/S016740482300384X) - Computers & Security 2023 | FedSGD | [FedSGD], FedOpt, FedAvg] |
 | FLDetector | [fldetector.py](aggregators/fldetector.py) | [FLDetector: Defending Federated Learning Against Model Poisoning Attacks via Detecting Malicious Clients](https://arxiv.org/abs/2207.09209) - KDD '22 | FedSGD |FedOpt, [FedOpt, FedAvg]|
 | SignGuard | [signguard.py](aggregators/signguard.py) | [Byzantine-robust Federated Learning through Collaborative Malicious Gradient Filtering](https://arxiv.org/abs/2109.05872) - ICDCS '22 | FedSGD |FedSGD, [FedOpt, FedAvg]|
 | Bucketing | [bucketing.py](aggregators/bucketing.py) | [Byzantine-Robust Learning on Heterogeneous Datasets via Bucketing](https://openreview.net/forum?id=jXKKDEi5vJt) - ICLR '22 | FedSGD | FedSGD, [FedOpt, FedAvg] |
