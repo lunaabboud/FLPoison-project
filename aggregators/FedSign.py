@@ -82,8 +82,8 @@ class FedSign(AggregatorBase):
         pad_benign_indices = np.where(Pi >= Pm)[0].tolist()
         pad_meta = {'Q_phi': Q_phi, 'Pi': Pi, 'Pm': Pm}
     
-        self.args.logger.info(f"PAD benign indices: {pad_benign_indices} (Q_phi={pad_meta.get('Q_phi')}, Pm={pad_meta.get('Pm')})")
+        self.args.logger.info(f"\nPAD benign indices: {pad_benign_indices} (Q_phi={pad_meta.get('Q_phi')}, Pm={pad_meta.get('Pm')})")
 
-        self.args.logger.info(f"Malicious client indices: {set(range(len(updates))) - set(pad_benign_indices)}\n")
+        self.args.logger.info(f"Malicious client indices: {set(range(len(updates))) - set(pad_benign_indices)}")
 
         return np.mean(updates[pad_benign_indices], axis=0)
