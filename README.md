@@ -170,33 +170,21 @@ The reproduction was successfully validated using the following environment.
 The framework can also be executed on CPU-only systems, although GPU acceleration is recommended for larger experiments.
 
 ---
-# Installation
+# Quick Start Guide
 
-This section describes the steps required to install and execute the FLPoison framework on a clean Ubuntu system.
-
----
-
-## Prerequisites
-
-Before installing the project, ensure the following software is available on your machine:
-
-- Ubuntu 22.04 LTS (recommended)
-- Git
-- Miniconda or Anaconda
-- Python 3.10
-- Internet connection (required for dependency and dataset downloads)
+This guide provides a complete walkthrough for cloning, installing, and running the FLPoison framework on a clean Ubuntu system.
 
 ---
 
-## Clone the Repository
+## Step 1 – Clone the Repository
 
-Clone the reproduced repository from GitHub:
+Open a terminal and clone the repository:
 
 ```bash
 git clone https://github.com/lunaabboud/FLPoison-project.git
 ```
 
-Navigate to the project directory:
+Move into the project directory:
 
 ```bash
 cd FLPoison-project
@@ -204,23 +192,29 @@ cd FLPoison-project
 
 ---
 
-## Create the Conda Environment
+## Step 2 – Create the Conda Environment
 
-All required dependencies are provided in the `environment.yaml` file.
+The repository provides an `environment.yaml` file containing all required dependencies.
 
-Create the environment using:
+Create the environment by running:
 
 ```bash
 conda env create -f environment.yaml
 ```
 
-Depending on your internet connection, the installation may take several minutes.
+This command installs all required Python packages and creates a Conda environment named:
+
+```text
+torchenv
+```
+
+The installation may take several minutes depending on your internet connection.
 
 ---
 
-## Activate the Environment
+## Step 3 – Activate the Environment
 
-After the installation completes successfully, activate the environment:
+Activate the Conda environment before running any experiments.
 
 ```bash
 conda activate torchenv
@@ -228,9 +222,9 @@ conda activate torchenv
 
 ---
 
-## Verify the Installation
+## Step 4 – Verify the Installation
 
-Verify that Python has been installed correctly:
+Verify that Python is correctly installed.
 
 ```bash
 python --version
@@ -244,13 +238,13 @@ Python 3.10.16
 
 ---
 
-Verify the installed PyTorch version:
+Verify that PyTorch is available.
 
 ```bash
 python -c "import torch; print(torch.__version__)"
 ```
 
-Expected output:
+Example output:
 
 ```text
 2.6.0
@@ -258,9 +252,7 @@ Expected output:
 
 ---
 
-## Verify CUDA (Optional)
-
-If an NVIDIA GPU is available, verify CUDA support:
+(Optional) Verify GPU support.
 
 ```bash
 python -c "import torch; print(torch.cuda.is_available())"
@@ -280,55 +272,163 @@ False
 
 If the output is `False`, the framework will automatically execute using the CPU.
 
-No additional configuration is required.
+---
+
+## Step 5 – Run a Quick Validation
+
+To quickly verify that the framework is functioning correctly, execute:
+
+```bash
+python main.py -config configs/FedSGD_MNIST_test.yaml
+```
+
+The `FedSGD_MNIST_test.yaml` configuration was created during the reproduction process to reduce the number of training epochs, allowing the framework to be validated much faster than the standard experiment.
+
+This is the recommended configuration for first-time execution.
 
 ---
 
-## Verify the Repository
+## Step 6 – Run the Standard Experiment
 
-The project directory should contain files similar to the following:
+To execute the original MNIST experiment, run:
 
-```text
-aggregators/
-attackers/
-configs/
-data/
-datapreprocessor/
-docs/
-fl/
-logs/
-environment.yaml
-main.py
-batchrun.py
-README.md
+```bash
+python main.py -config configs/FedSGD_MNIST_config.yaml
+```
+
+Alternatively, the number of training epochs can be overridden directly from the command line without modifying the configuration file.
+
+Example:
+
+```bash
+python main.py -config configs/FedSGD_MNIST_config.yaml -e 3
 ```
 
 ---
 
-## First-Time Execution
+## Step 7 – Verify Successful Execution
 
-During the first execution, the framework may automatically create additional directories and download the required datasets if they are not already available.
+The framework has been installed successfully if you observe the following:
 
-This process only occurs once.
+- The configuration file loads successfully.
+- The dataset is downloaded automatically (if not already available).
+- The Federated Learning server and clients are initialized.
+- Training rounds begin without errors.
+- Training and evaluation metrics are displayed in the terminal.
+- The experiment completes successfully.
+- Output files are generated inside the `logs/` directory.
 
-Subsequent executions will reuse the downloaded datasets.
+Typical terminal output includes messages similar to:
+
+```text
+Loading configuration...
+Loading dataset...
+Initializing clients...
+Starting Federated Learning...
+Training...
+Evaluating...
+Experiment completed successfully.
+```
+
+---
+
+## Step 8 – Generated Outputs
+
+After successful execution, experiment outputs are stored inside the `logs/` directory.
+
+Depending on the selected experiment, generated files may include:
+
+- Training logs
+- Evaluation metrics
+- Accuracy and loss values
+- Figures and plots
+- Experiment summaries
+
+---
+
+## Running Other Experiments
+
+To execute experiments using different datasets or algorithms, simply specify another configuration file.
+
+Examples:
+
+FedSGD on CIFAR-10
+
+```bash
+python main.py -config configs/FedSGD_CIFAR10_config.yaml
+```
+
+FedSGD on CIFAR-100
+
+```bash
+python main.py -config configs/FedSGD_CIFAR100_config.yaml
+```
+
+FedOpt on MNIST
+
+```bash
+python main.py -config configs/FedOpt_MNIST_config.yaml
+```
+
+Additional experiment configurations are available in the `configs/` directory.
+
+---
+
+## Troubleshooting
+
+### Conda environment already exists
+
+Remove the existing environment:
+
+```bash
+conda env remove -n torchenv
+```
+
+Then recreate it:
+
+```bash
+conda env create -f environment.yaml
+```
+
+---
+
+### CUDA is not detected
+
+Run:
+
+```bash
+python -c "import torch; print(torch.cuda.is_available())"
+```
+
+The project can still be executed using the CPU if CUDA is unavailable.
+
+---
+
+### Package installation failed
+
+If the Conda environment was not created successfully, remove it and reinstall:
+
+```bash
+conda env remove -n torchenv
+conda env create -f environment.yaml
+```
 
 ---
 
 ## Installation Checklist
 
-Before running any experiments, verify that:
+Before running experiments, verify that:
 
 - Repository cloned successfully.
 - Conda environment created successfully.
-- Environment activated (`torchenv`).
+- Environment activated.
 - Python version is 3.10.16.
-- PyTorch imports without errors.
-- CUDA is detected if a compatible GPU is available.
+- PyTorch imports successfully.
+- The quick validation experiment executes without errors.
+- Output files are generated in the `logs/` directory.
 
-If all the above steps complete successfully, the project is ready to execute experiments.
+If all of the above conditions are satisfied, the FLPoison framework has been successfully reproduced and is ready for further experimentation.
 
----
 # Running the Project
 
 After completing the installation and activating the Conda environment, the framework is ready to execute Federated Learning experiments.
