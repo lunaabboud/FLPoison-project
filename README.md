@@ -1,123 +1,483 @@
-# Welcome to FLPoison
+# FLPoison Project Reproduction
 
-![Python Versions](https://img.shields.io/badge/Python-3.6%2B-blue)
-![Framework](https://img.shields.io/badge/PyTorch-orange)
-![Last Commit](https://img.shields.io/github/last-commit/vio1etus/FLPoison)
-[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![Framework](https://img.shields.io/badge/Framework-PyTorch-orange)
+![Platform](https://img.shields.io/badge/Platform-Ubuntu%2022.04-success)
+![License](https://img.shields.io/badge/License-GPL%20v2-blue)
 
-<!-- ![Repo Size](https://img.shields.io/github/repo-size/vio1etus/FLPoison) -->
+## Overview
 
-Check the [Wiki](../../wiki#getting-started) to get started with the project.
+This repository contains a reproduced implementation of the **FLPoison** framework, a benchmarking platform for evaluating poisoning attacks and defense mechanisms in Federated Learning (FL).
 
-## Features
+The project was reproduced as part of a **Mitacs Research Project** to verify the reproducibility of the original framework and provide a documented execution environment that can be easily followed by other researchers.
 
-PyTorch's implementation of poisoning attacks and defenses in federated learning.
+The original FLPoison framework implements multiple Federated Learning algorithms, poisoning attacks, and defense mechanisms within a unified PyTorch-based environment, enabling reproducible experiments across different datasets and learning settings.
 
-|     **Category**      |                                                                                      **Details**                                                                                       |
-| :-------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|   **FL Algorithms**   |                                                               FedAvg, FedSGD, FedOpt(see [fl/algorithms](fl/algorithms))                                                               |
-| **Data Distribution** | Balanced IID, Class-imbalanced IID, Quantity-imbalanced Dirichlet Non-IID, (Quantity-Balanced\|-Imbalanced) Pathological Non-IID (see [data_utils.py](datapreprocessor/data_utils.py)) |
-|     **Datasets**      |                                    MNIST, FashionMNIST, EMNIST, CIFAR10, CINIC10, CIFAR100, CHMNIST, TinyImageNet (see [dataset_config.yaml](configs/dataset_config.yaml))                                    |
-|      **Models**       |                                                           Logistic Regression, SimpleCNN, LeNet5, ResNet-series, VGG-series                                                            |
+This repository preserves the original implementation while providing an updated execution guide, validated environment configuration, and simplified testing procedure.
 
-Supported datasets and models pairs see [datamodel.pdf](docs/datamodel.pdf)
+---
+
+# Project Objectives
+
+The objectives of this reproduction are:
+
+- Successfully reproduce the FLPoison framework.
+- Validate the installation on a clean Ubuntu 22.04 environment.
+- Verify that all required dependencies can be installed using Conda.
+- Execute a complete Federated Learning experiment successfully.
+- Provide clear documentation for future users and researchers.
+
+---
+
+# Main Features
+
+The framework provides implementations of:
 
 ## Federated Learning Algorithms
 
-<!-- prettier-ignore -->
-| Name | Source File |Paper|
-|--|--|--|
-|FedSGD|[fedsgd.py](fl/algorithms/fedsgd.py)|[Communication-Efficient Learning of Deep Networks from Decentralized Data](https://proceedings.mlr.press/v54/mcmahan17a) - AISTATS '17|
-|FedAvg|[fedavg.py](fl/algorithms/fedavg.py)|[Communication-Efficient Learning of Deep Networks from Decentralized Data](https://proceedings.mlr.press/v54/mcmahan17a) - AISTATS '17|
-|FedOpt|[fedopt.py](fl/algorithms/fedopt.py)|[Adaptive Federated Optimization](https://arxiv.org/pdf/2003.00295) - arxiv '20, ICLR '21|
+- FedSGD
+- FedAvg
+- FedOpt
 
-## Attacks and Defenses
+---
 
-Applicable algorithms include base algorithms used by original paper, as well as others not explicitly mentioned but applicable based on the described principles. `[ ]` indicates necessary modifications for compatibility, also implemented within this framework. To sum up, we implemented and adapted the attacks and defenses to be compatible with three commonly-used FL algorithms, FedSGD, FedOpt, FedAvg.
+## Supported Datasets
 
-### Data Poisoning Attacks (DPAs)
+- MNIST
+- FashionMNIST
+- EMNIST
+- CIFAR-10
+- CIFAR-100
+- CINIC-10
+- CHMNIST
+- TinyImageNet
 
-Data poisoning attacks here, mainly targeted attacks, refer to attacks aimed at **embedding backdoors or bias into the model**, thus misleading it to produce the attacker's intended prediction
+---
 
-<!-- | 3DFed | [threedfed.py](attackers/threedfed.py) | [3DFed: Adaptive and Extensible Framework for Covert Backdoor Attack in Federated Learning](https://ieeexplore.ieee.org/document/10179401) - S&P '23|  || -->
+## Supported Models
 
-<!-- prettier-ignore -->
-| Name | Source File | Paper | Base Algorithm | Applicable Algorithms |
-|:---:|:---:|:---:|:---:|:---:|
-| Neurotoxin | [neurotoxin.py](attackers/neurotoxin.py) | [Neurotoxin: Durable Backdoors in Federated Learning](https://proceedings.mlr.press/v162/zhang22w.html) - ICML '22 | FedOpt | FedOpt, [FedSGD, FedAvg] |
-| Edge-case Backdoor | [edgecase.py](attackers/edgecase.py) | [Attack of the Tails: Yes, You Really Can Backdoor Federated Learning](https://arxiv.org/abs/2007.05084) - NeurIPS '20 | FedOpt |FedSGD, FedOpt, [FedAvg]|
-| Model Replacement Attack (Scaling Attack) | [modelreplacement.py](attackers/modelreplacement.py) | [How to Backdoor Federated Learning](https://proceedings.mlr.press/v108/bagdasaryan20a.html) - AISTATS '20 |FedOpt |FedOpt, [FedSGD, FedAvg]|
-| Alternating Minimization | [altermin.py](attackers/altermin.py) | [Analyzing Federated Learning Through an Adversarial Lens](https://arxiv.org/abs/1811.12470) - ICML '19 | FedOpt |FedSGD, FedOpt, [FedAvg]|
-| DBA | [dba.py](attackers/dba.py) | [DBA: Distributed Backdoor Attacks Against Federated Learning](https://openreview.net/forum?id=rkgyS0VFvr) - ICLR '19 | FedOpt |FedSGD, FedOpt, [FedAvg]|
-| BadNets | [badnets.py](attackers/badnets.py) | [BadNets: Identifying Vulnerabilities in the Machine Learning Model Supply Chain](https://arxiv.org/abs/1708.06733) - NIPS-WS '17 | Centralized ML |[FedSGD, FedOpt, FedAvg]|
-| Label Flipping Attack | [labelflipping.py](attackers/labelflipping.py) | [Poisoning Attacks against Support Vector Machines](https://arxiv.org/abs/1206.6389) - ICML'12 | Centralized ML |[FedSGD, FedOpt, FedAvg]|
+- Logistic Regression
+- SimpleCNN
+- LeNet-5
+- ResNet Family
+- VGG Family
 
-### Defenses Against DPAs
+---
 
-<!-- prettier-ignore -->
-| Name | Source File | Paper | Base Algorithm | Applicable Algorithms |
-|:---:|:---:|:---:|:---:|:---:|
-| FLAME | [flame.py](aggregators/flame.py) | [FLAME: Taming Backdoors in Federated Learning](https://www.usenix.org/conference/usenixsecurity22/presentation/nguyen) - USENIX Security '22 | FedOpt | FedOpt,[FedSGD, FedAvg]|
-| DeepSight | [deepsight.py](aggregators/deepsight.py) | [DeepSight: Mitigating Backdoor Attacks in Federated Learning Through Deep Model Inspection](https://arxiv.org/abs/2201.00763) - NDSS '22 | FedOpt |FedOpt, [FedSGD, FedAvg]|
-| CRFL | [crfl.py](aggregators/crfl.py) | [CRFL: Certifiably Robust Federated Learning against Backdoor Attacks](http://proceedings.mlr.press/v139/xie21a/xie21a.pdf) - ICML '21| FedOpt | FedOpt, [FedSGD, FedAvg]|
-| NormClipping | [normclipping.py](aggregators/normclipping.py) | [Can You Really Backdoor Federated Learning](https://arxiv.org/abs/1911.07963) - NeurIPS '20 | FedOpt |FedOpt, [FedSGD, FedAvg]|
-| FoolsGold | [foolsgold.py](aggregators/foolsgold.py) | [The Limitations of Federated Learning in Sybil Settings](https://www.usenix.org/conference/raid2020/presentation/fung) - RAID '20 | FedSGD |FedSGD, [FedOpt, FedAvg]|
-| Auror | [auror.py](aggregators/auror.py) | [Auror: Defending against poisoning attacks in collaborative deep learning systems](https://dl.acm.org/doi/10.1145/2991079.2991125) - ACSAC '16 | FedSGD |FedSGD, [FedOpt, FedAvg]|
+## Implemented Poisoning Attacks
 
-### Model Poisoning Attacks (MPAs)
+### Data Poisoning Attacks
 
-Model poisoning attacks here, main untargeted attacks, refer to the attacks aimed at **preventing convergence** of the model, thus affecting the model's performance.
+- Neurotoxin
+- Edge-Case Backdoor
+- Model Replacement Attack
+- Alternating Minimization
+- DBA
+- BadNets
+- Label Flipping
 
-<!-- prettier-ignore -->
-| Name | Source File | Paper | Base Algorithm | Applicable Algorithms |
-|:---:|:---:|:---:|:---:|:---:|
-| HIDRA Attack | [hidra.py](attackers/hidra.py) | [Attacking Byzantine Robust Aggregation in High Dimensions](https://ieeexplore.ieee.org/document/10646844) - IEEE S&P '24 | FedSGD | FedSGD, [FedOpt, FedAvg] |
-| Mimic Attack | [mimic.py](attackers/mimic.py) | [Byzantine-Robust Learning on Heterogeneous Datasets via Bucketing](https://openreview.net/forum?id=jXKKDEi5vJt) - ICLR '22 | FedSGD | FedSGD, [FedOpt, FedAvg] |
-| Min-Max attack | [min.py](attackers/min.py) | [Manipulating the Byzantine: Optimizing Model Poisoning Attacks and Defenses for Federated Learning](https://www.ndss-symposium.org/ndss-paper/manipulating-the-byzantine-optimizing-model-poisoning-attacks-and-defenses-for-federated-learning/) - NDSS '21 | FedSGD | FedSGD, [FedOpt, FedAvg] |
-| Min-Sum attack | [min.py](attackers/min.py) | [Manipulating the Byzantine: Optimizing Model Poisoning Attacks and Defenses for Federated Learning](https://www.ndss-symposium.org/ndss-paper/manipulating-the-byzantine-optimizing-model-poisoning-attacks-and-defenses-for-federated-learning/) - NDSS '21 | FedSGD | FedSGD, [FedOpt, FedAvg] |
-| Fang attack (Adaptive attack) | [fangattack.py](attackers/fangattack.py) | [Local Model Poisoning Attacks to Byzantine-Robust Federated Learning](https://arxiv.org/abs/1911.11815) - USENIX Security '20 | FedAvg  | [FedSGD, FedOpt], FedAvg |
-| IPM attack | [ipm.py](attackers/ipm.py) | [Fall of empires: Breaking Byzantine-tolerant SGD by inner product manipulation](https://proceedings.mlr.press/v115/xie20a.html) - UAI '20 | FedSGD | FedSGD, [FedOpt, FedAvg] |
-| ALIE attack | [alie.py](attackers/alie.py) | [A Little Is Enough: Circumventing Defenses For Distributed Learning](https://proceedings.neurips.cc/paper_files/paper/2019/hash/ec1c59141046cd1866bbbcdfb6ae31d4-Abstract.html) - NeurIPS '19 | FedSGD | FedSGD, [FedOpt, FedAvg] |
-| Sign flipping attack | [signflipping.py](attackers/signflipping.py) | [Asynchronous Byzantine machine learning (the case of SGD)](http://proceedings.mlr.press/v80/damaskinos18a/damaskinos18a.pdf) - ICML '18 |FedSGD| FedSGD, [FedOpt, FedAvg] |
-| Gaussian (noise) attack | [gaussian.py](attackers/gaussian.py) | [Machine Learning with Adversaries: Byzantine Tolerant Gradient Descent](https://papers.nips.cc/paper_files/paper/2017/hash/f4b9ec30ad9f68f89b29639786cb62ef-Abstract.html) - NeurIPS '17 |FedSGD| FedSGD, [FedOpt, FedAvg] |
+### Model Poisoning Attacks
 
-### Defenses Against MPAs
+- HIDRA
+- Mimic Attack
+- Min-Max
+- Min-Sum
+- Fang Attack
+- IPM Attack
+- ALIE Attack
+- Sign Flipping
+- Gaussian Attack
 
-<!-- prettier-ignore -->
-| Name | Source File | Paper |  Base Algorithm | Applicable Algorithms |
-|:---:|:---:|:---:|:---:|:---:|
-| LASA |[lasa.py](aggregators/lasa.py)|[Achieving Byzantine-Resilient Federated Learning via Layer-Adaptive Sparsified Model Aggregation](https://arxiv.org/pdf/2409.01435) - WACV '25 | FedOpt | FedSGD, [FedOpt, FedAvg] |
-| FedSign |[fedsign.py](aggregators/lasa.py)|[FedSIGN: A sign-based federated learning framework with privacy and robustness guarantees](https://www.sciencedirect.com/science/article/abs/pii/S016740482300384X) - Computers & Security 2023 | FedSGD | [FedSGD], FedOpt, FedAvg] |
-| FLDetector | [fldetector.py](aggregators/fldetector.py) | [FLDetector: Defending Federated Learning Against Model Poisoning Attacks via Detecting Malicious Clients](https://arxiv.org/abs/2207.09209) - KDD '22 | FedSGD |FedOpt, [FedOpt, FedAvg]|
-| SignGuard | [signguard.py](aggregators/signguard.py) | [Byzantine-robust Federated Learning through Collaborative Malicious Gradient Filtering](https://arxiv.org/abs/2109.05872) - ICDCS '22 | FedSGD |FedSGD, [FedOpt, FedAvg]|
-| Bucketing | [bucketing.py](aggregators/bucketing.py) | [Byzantine-Robust Learning on Heterogeneous Datasets via Bucketing](https://openreview.net/forum?id=jXKKDEi5vJt) - ICLR '22 | FedSGD | FedSGD, [FedOpt, FedAvg] |
-| DnC | [dnc.py](aggregators/dnc.py) | [Manipulating the Byzantine: Optimizing Model Poisoning Attacks and Defenses for Federated Learning](https://www.ndss-symposium.org/ndss-paper/manipulating-the-byzantine-optimizing-model-poisoning-attacks-and-defenses-for-federated-learning/) - NDSS '21 | FedSGD |FedSGD, [FedOpt, FedAvg]|
-| CenteredClipping | [centeredclipping](aggregators/centeredclipping.py) | [Learning from History for Byzantine Robust Optimization](https://arxiv.org/abs/2012.10333) - ICML '21 | FedSGD |FedSGD, [FedOpt, FedAvg]|
-| FLTrust | [fltrust.py](aggregators/fltrust.py) | [FLTrust: Byzantine-robust Federated Learning via Trust Bootstrapping](https://arxiv.org/abs/2012.13995) - ArXiv'20, NDSS '21 | FedOpt |FedOpt, [FedSGD, FedAvg]|
-| RFA (Geometric Median) | [rfa.py](aggregators/rfa.py) | [Robust Aggregation for Federated Learning](https://ieeexplore.ieee.org/document/9721118) - ArXiv'19, TSP '22 | FedAvg | [FedSGD, FedOpt], FedAvg|
-| Bulyan | [bulyan.py](aggregators/bulyan.py) | [The hidden vulnerability of distributed learning in Byzantium](https://arxiv.org/abs/1802.07927) - ICML'18 | FedSGD |FedSGD, [FedOpt,FedAvg]|
-| Coordinate-wise Median | [median.py](aggregators/median.py) | [Byzantine-robust distributed learning: Towards optimal statistical rates](https://proceedings.mlr.press/v80/yin18a.html) - ICML'18 | FedSGD | FedSGD, [FedOpt, FedAvg]|
-| Trimmed Mean | [trimmedmean.py](aggregators/trimmedmean.py) | [Byzantine-robust distributed learning: Towards optimal statistical rates](https://proceedings.mlr.press/v80/yin18a.html) - ICML'18 | FedSGD | FedSGD, [FedOpt, FedAvg] |
-| Multi-Krum | [multikrum.py](aggregators/multikrum.py) | [Machine Learning with Adversaries: Byzantine Tolerant Gradient Descent](https://papers.nips.cc/paper_files/paper/2017/hash/f4b9ec30ad9f68f89b29639786cb62ef-Abstract.html) - NeurIPS '17 | FedSGD | FedSGD, [FedOpt, FedAvg] |
-| Krum | [krum.py](aggregators/krum.py) | [Machine Learning with Adversaries: Byzantine Tolerant Gradient Descent](https://papers.nips.cc/paper_files/paper/2017/hash/f4b9ec30ad9f68f89b29639786cb62ef-Abstract.html) - NeurIPS '17 | FedSGD | FedSGD, [FedOpt, FedAvg] |
-|SimpleClustering|[simpleclustering.py](aggregators/simpleclustering.py)|Simple majority-based clustering| FedSGD, FedAvg, FedOpt|FedSGD, FedAvg, FedOpt|
+---
 
-## Contributing
+## Implemented Defenses
 
-Bug reports, feature suggestions, and code contributions are welcome. Please open an issue or submit a pull request if you encounter any problems or have suggestions.
+### Against Data Poisoning
 
-## Citation
+- FLAME
+- DeepSight
+- CRFL
+- Norm Clipping
+- FoolsGold
+- Auror
 
-If you are using FLPoison for your work, please cite our paper with:
+### Against Model Poisoning
+
+- LASA
+- FedSIGN
+- FLDetector
+- SignGuard
+- Bucketing
+- Divide-and-Conquer (DnC)
+- Centered Clipping
+- FLTrust
+- RFA
+- Bulyan
+- Coordinate-wise Median
+- Trimmed Mean
+- Multi-Krum
+- Krum
+- SimpleClustering
+
+---
+
+# Repository Structure
 
 ```
-@misc{sokflpoison,
-      title={SoK: Benchmarking Poisoning Attacks and Defenses in Federated Learning},
-      author={Heyi Zhang and Yule Liu and Xinlei He and Jun Wu and Tianshuo Cong and Xinyi Huang},
-      year={2025},
-      eprint={2502.03801},
-      archivePrefix={arXiv},
-      primaryClass={cs.CR},
-      url={https://arxiv.org/abs/2502.03801},
-}
+
+FLPoison-project/
+
+├── aggregators/ # Defense aggregation methods
+
+├── attackers/ # Poisoning attack implementations
+
+├── configs/ # Experiment configuration files
+
+├── data/ # Dataset directory
+
+├── datapreprocessor/ # Dataset preprocessing utilities
+
+├── docs/ # Project documentation
+
+├── fl/ # Federated Learning framework
+
+├── logs/ # Generated experiment outputs
+
+├── environment.yaml # Conda environment
+
+├── batchrun.py # Batch experiment runner
+
+├── main.py # Main execution file
+
+└── README.md
+
 ```
+
+---
+
+# Tested Environment
+
+The reproduction was successfully validated using the following environment.
+
+| Component | Version |
+|------------|----------|
+| Operating System | Ubuntu 22.04 LTS |
+| Python | 3.10.16 |
+| Conda | Miniconda |
+| PyTorch | 2.6.0 |
+| CUDA | Supported (optional) |
+
+The framework can also be executed on CPU-only systems, although GPU acceleration is recommended for larger experiments.
+
+---
+# Installation
+
+This section describes the steps required to install and execute the FLPoison framework on a clean Ubuntu system.
+
+---
+
+## Prerequisites
+
+Before installing the project, ensure the following software is available on your machine:
+
+- Ubuntu 22.04 LTS (recommended)
+- Git
+- Miniconda or Anaconda
+- Python 3.10
+- Internet connection (required for dependency and dataset downloads)
+
+---
+
+## Clone the Repository
+
+Clone the reproduced repository from GitHub:
+
+```bash
+git clone https://github.com/lunaabboud/FLPoison-project.git
+```
+
+Navigate to the project directory:
+
+```bash
+cd FLPoison-project
+```
+
+---
+
+## Create the Conda Environment
+
+All required dependencies are provided in the `environment.yaml` file.
+
+Create the environment using:
+
+```bash
+conda env create -f environment.yaml
+```
+
+Depending on your internet connection, the installation may take several minutes.
+
+---
+
+## Activate the Environment
+
+After the installation completes successfully, activate the environment:
+
+```bash
+conda activate torchenv
+```
+
+---
+
+## Verify the Installation
+
+Verify that Python has been installed correctly:
+
+```bash
+python --version
+```
+
+Expected output:
+
+```text
+Python 3.10.16
+```
+
+---
+
+Verify the installed PyTorch version:
+
+```bash
+python -c "import torch; print(torch.__version__)"
+```
+
+Expected output:
+
+```text
+2.6.0
+```
+
+---
+
+## Verify CUDA (Optional)
+
+If an NVIDIA GPU is available, verify CUDA support:
+
+```bash
+python -c "import torch; print(torch.cuda.is_available())"
+```
+
+Possible outputs:
+
+```text
+True
+```
+
+or
+
+```text
+False
+```
+
+If the output is `False`, the framework will automatically execute using the CPU.
+
+No additional configuration is required.
+
+---
+
+## Verify the Repository
+
+The project directory should contain files similar to the following:
+
+```text
+aggregators/
+attackers/
+configs/
+data/
+datapreprocessor/
+docs/
+fl/
+logs/
+environment.yaml
+main.py
+batchrun.py
+README.md
+```
+
+---
+
+## First-Time Execution
+
+During the first execution, the framework may automatically create additional directories and download the required datasets if they are not already available.
+
+This process only occurs once.
+
+Subsequent executions will reuse the downloaded datasets.
+
+---
+
+## Installation Checklist
+
+Before running any experiments, verify that:
+
+- Repository cloned successfully.
+- Conda environment created successfully.
+- Environment activated (`torchenv`).
+- Python version is 3.10.16.
+- PyTorch imports without errors.
+- CUDA is detected if a compatible GPU is available.
+
+If all the above steps complete successfully, the project is ready to execute experiments.
+
+---
+# Running the Project
+
+After completing the installation and activating the Conda environment, the framework is ready to execute Federated Learning experiments.
+
+The project supports multiple datasets and algorithms through YAML configuration files located in the `configs/` directory.
+
+---
+
+# Available Configuration Files
+
+Some of the available experiment configurations include:
+
+| Configuration File | Description |
+|--------------------|-------------|
+| `FedSGD_MNIST_config.yaml` | Standard FedSGD experiment on MNIST |
+| `FedSGD_MNIST_test.yaml` | Lightweight MNIST configuration for quick validation |
+| `FedSGD_CIFAR10_config.yaml` | FedSGD on CIFAR-10 |
+| `FedSGD_CIFAR100_config.yaml` | FedSGD on CIFAR-100 |
+| `FedSGD_CINIC10_config.yaml` | FedSGD on CINIC-10 |
+| `FedSGD_CHMNIST_config.yaml` | FedSGD on CHMNIST |
+| `FedSGD_TinyImageNet_config.yaml` | FedSGD on TinyImageNet |
+| `FedOpt_MNIST_config.yaml` | FedOpt on MNIST |
+| `FedOpt_CIFAR10_config.yaml` | FedOpt on CIFAR-10 |
+
+Additional configuration files can be found inside the `configs/` directory.
+
+---
+
+# Quick Validation (Recommended)
+
+To quickly verify that the project has been installed correctly, execute:
+
+```bash
+python main.py -config configs/FedSGD_MNIST_test.yaml
+```
+
+The `FedSGD_MNIST_test.yaml` configuration was created specifically for the reproduction process.
+
+It is based on the standard MNIST configuration but uses a reduced number of training epochs, allowing the framework to be validated much faster while preserving the same execution workflow.
+
+This configuration is recommended for installation verification, debugging, and quick functionality testing.
+
+---
+
+# Running the Standard MNIST Experiment
+
+To execute the original MNIST experiment, run:
+
+```bash
+python main.py -config configs/FedSGD_MNIST_config.yaml
+```
+
+This command executes the experiment using the parameters defined in the original configuration file.
+
+---
+
+# Overriding the Number of Epochs
+
+Instead of modifying the YAML configuration file, the number of training epochs can be overridden directly from the command line.
+
+For example, to execute the standard MNIST experiment using only three epochs:
+
+```bash
+python main.py -config configs/FedSGD_MNIST_config.yaml -e 3
+```
+
+The `-e` argument overrides the epoch value specified inside the configuration file.
+
+This is particularly useful for:
+
+- Quick validation
+- Debugging
+- Testing new modifications
+- Reducing execution time
+
+without permanently modifying the original experiment configuration.
+
+---
+
+# Running Other Experiments
+
+To execute experiments using different datasets, simply specify another configuration file.
+
+Examples:
+
+CIFAR-10
+
+```bash
+python main.py -config configs/FedSGD_CIFAR10_config.yaml
+```
+
+CIFAR-100
+
+```bash
+python main.py -config configs/FedSGD_CIFAR100_config.yaml
+```
+
+FedOpt on MNIST
+
+```bash
+python main.py -config configs/FedOpt_MNIST_config.yaml
+```
+
+The same procedure applies to all configuration files included in the repository.
+
+---
+
+# Expected Output
+
+When the experiment starts successfully, the terminal will display information similar to:
+
+- Loading configuration...
+- Loading dataset...
+- Initializing clients...
+- Building the neural network...
+- Starting federated learning rounds...
+- Training progress
+- Evaluation metrics
+- Experiment completed successfully
+
+Depending on the selected configuration, execution time may vary from a few minutes to significantly longer for larger datasets.
+
+---
+
+# Generated Output
+
+After the experiment completes successfully, the framework automatically generates experiment outputs.
+
+Typical outputs include:
+
+- Training logs
+- Evaluation metrics
+- Accuracy and loss values
+- Generated figures (when applicable)
+- Experiment summaries
+
+These outputs are stored inside the `logs/` directory.
+
+---
+
+# Verification Checklist
+
+The reproduction can be considered successful if:
+
+- The project starts without import errors.
+- The selected configuration loads successfully.
+- The training process begins normally.
+- Federated learning rounds execute correctly.
+- The experiment completes without runtime errors.
+- Output files are generated inside the `logs/` directory.
+
+Successful completion of these steps confirms that the FLPoison framework has been reproduced correctly.
