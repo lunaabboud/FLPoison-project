@@ -16,7 +16,16 @@ The original FLPoison framework implements multiple Federated Learning algorithm
 This repository preserves the original implementation while providing an updated execution guide, validated environment configuration, and simplified testing procedure.
 
 ---
+## Original Project
 
+This repository reproduces the FLPoison framework originally developed by Zhang et al. for benchmarking poisoning attacks and defense mechanisms in Federated Learning.
+
+- **Original Repository:** https://github.com/vio1etus/FLPoison
+- **Original Paper:** *SoK: Benchmarking Poisoning Attacks and Defenses in Federated Learning* (2025)
+
+The purpose of this repository is to reproduce, validate, and document the original implementation as part of a Mitacs research project.
+
+---
 # Project Objectives
 
 The objectives of this reproduction are:
