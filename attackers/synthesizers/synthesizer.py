@@ -18,25 +18,41 @@ class Synthesizer:
             setattr(self, key, value)
 
     def backdoor_batch(self, images, labels, train=False, **kwargs):
-        worker_id = kwargs.get('worker_id', None)
+        worker_id = kwargs.get("worker_id", None)
 
-        if len(images.shape) == 4:  # batch
-            len_images = images.shape[0]
+        # Detect whether we received a batch.
+        # Works for both:
+        #   Images  -> (N,C,H,W)
+        #   Tabular -> (N,F)
+        if labels.ndim > 0 and labels.shape[0] > 1:
+
+            len_images = labels.shape[0]
+
             poisoned_idx_per_batch = self.setup_poisoned_idx(
-                len_images, train)
-            # 2. implement the main backdoor logic when the condition is met.
-            for idx in range(len_images):
-                if idx in poisoned_idx_per_batch:
-                    # backdoor implantation
-                    images[idx], labels[idx] = self.implant_backdoor(
-                        images[idx], labels[idx], train=train, worker_id=worker_id)
-        else:
-            len_images = 1
-            images, labels = self.implant_backdoor(
-                images, labels, train=train, worker_id=worker_id)
-            labels = torch.tensor(labels)
-        return images, labels
+                len_images,
+                train
+            )
 
+            for idx in poisoned_idx_per_batch:
+                images[idx], labels[idx] = self.implant_backdoor(
+                    images[idx],
+                    labels[idx],
+                    train=train,
+                    worker_id=worker_id
+                )
+
+        else:
+
+            images, labels = self.implant_backdoor(
+                images,
+                labels,
+                train=train,
+                worker_id=worker_id
+            )
+
+            labels = torch.tensor(labels)
+
+        return images, labels
     def implant_backdoor(self, image, label, **kwargs):
         # use the default implant_trigger function if not provided. LabelFlipping will provide the implant_trigger
         implant_trigger = kwargs.get(

@@ -1,0 +1,30 @@
+seed: 4, epochs: 20, algorithm: FedSGD, optimizer: SGD, momentum: 0.9, weight_decay: 0.0005, num_clients: 50, batch_size: 64, learning_rate: 0.01, model: mlp, dataset: RT_IOT2022, distribution: iid, im_iid_gamma: 0.01, tail_cls_from: 4, dirichlet_alpha: 0.5, cache_partition: False, gpu_idx: [0], num_workers: 0, record_time: False, num_adv: 10, attack: AlterMin, defense: Mean, defense_params: None, benchmark: False, num_training_sample: 123117, num_channels: 82, num_classes: 12, num_features: 82, mean: None, std: None, device: cuda:0, attack_params: None, output: ./logs/FedSGD/RT_IOT2022_mlp/iid/RT_IOT2022_mlp_iid_AlterMin_Mean_20_50_0.01_FedSGD.txt
+
+Started on Thu Aug  6 17:22:57 2026
+Generating new indices
+Doing iid partition
+iid partition finished
+Data partitioned
+Clients and server are initialized
+Starting Training...
+Epoch 0  		Train Acc: 0.0865	Train loss: 0.0396	Test Acc: 0.3287	Test loss: 0.0375	ASR: 0.0937	ASR loss: 0.0000
+Epoch 1  		Train Acc: 0.3998	Train loss: 0.0368	Test Acc: 0.7814	Test loss: 0.0339	ASR: 0.1280	ASR loss: 0.0000
+Epoch 2  		Train Acc: 0.7710	Train loss: 0.0330	Test Acc: 0.7954	Test loss: 0.0296	ASR: 0.2554	ASR loss: 0.0000
+Epoch 3  		Train Acc: 0.7918	Train loss: 0.0287	Test Acc: 0.7975	Test loss: 0.0246	ASR: 0.4880	ASR loss: 0.0000
+Epoch 4  		Train Acc: 0.7994	Train loss: 0.0233	Test Acc: 0.7991	Test loss: 0.0193	ASR: 0.7463	ASR loss: 0.0000
+Epoch 5  		Train Acc: 0.7996	Train loss: 0.0182	Test Acc: 0.8000	Test loss: 0.0148	ASR: 0.8732	ASR loss: 0.0000
+Epoch 6  		Train Acc: 0.8067	Train loss: 0.0141	Test Acc: 0.8015	Test loss: 0.0119	ASR: 0.9295	ASR loss: 0.0000
+Epoch 7  		Train Acc: 0.7915	Train loss: 0.0119	Test Acc: 0.8023	Test loss: 0.0101	ASR: 0.9568	ASR loss: 0.0000
+Epoch 8  		Train Acc: 0.8041	Train loss: 0.0098	Test Acc: 0.8024	Test loss: 0.0091	ASR: 0.9693	ASR loss: 0.0000
+Epoch 9  		Train Acc: 0.8072	Train loss: 0.0087	Test Acc: 0.8024	Test loss: 0.0084	ASR: 0.9754	ASR loss: 0.0000
+Epoch 10 		Train Acc: 0.7978	Train loss: 0.0085	Test Acc: 0.8024	Test loss: 0.0080	ASR: 0.9788	ASR loss: 0.0000
+Epoch 11 		Train Acc: 0.7993	Train loss: 0.0079	Test Acc: 0.8024	Test loss: 0.0076	ASR: 0.9806	ASR loss: 0.0000
+Epoch 12 		Train Acc: 0.8034	Train loss: 0.0076	Test Acc: 0.8368	Test loss: 0.0073	ASR: 0.9839	ASR loss: 0.0000
+Epoch 13 		Train Acc: 0.8432	Train loss: 0.0073	Test Acc: 0.8616	Test loss: 0.0070	ASR: 0.9850	ASR loss: 0.0000
+Epoch 14 		Train Acc: 0.8589	Train loss: 0.0072	Test Acc: 0.8889	Test loss: 0.0067	ASR: 0.9861	ASR loss: 0.0000
+Epoch 15 		Train Acc: 0.8940	Train loss: 0.0066	Test Acc: 0.8894	Test loss: 0.0065	ASR: 0.9868	ASR loss: 0.0000
+Epoch 16 		Train Acc: 0.8928	Train loss: 0.0064	Test Acc: 0.8926	Test loss: 0.0062	ASR: 0.9871	ASR loss: 0.0000
+Epoch 17 		Train Acc: 0.8966	Train loss: 0.0060	Test Acc: 0.8972	Test loss: 0.0060	ASR: 0.9882	ASR loss: 0.0000
+Epoch 18 		Train Acc: 0.8944	Train loss: 0.0059	Test Acc: 0.9023	Test loss: 0.0058	ASR: 0.9902	ASR loss: 0.0000
+Epoch 19 		Train Acc: 0.8994	Train loss: 0.0058	Test Acc: 0.9042	Test loss: 0.0056	ASR: 0.9899	ASR loss: 0.0000
+Training finished on Thu Aug  6 17:23:21 2026 using 0 minutes and 24 seconds in total.

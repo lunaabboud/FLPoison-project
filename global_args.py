@@ -43,8 +43,20 @@ def read_args():
     parser.add_argument('-le', '--local_epochs', type=int,
                         help='local global_epoch')
     parser.add_argument('-model', '--model', choices=all_models)
-    parser.add_argument('-data', '--dataset',
-                        choices=['MNIST', 'FashionMNIST', 'CIFAR10', 'CINIC10', 'CIFAR100', 'EMNIST'])
+    parser.add_argument(
+    '-data', '--dataset',
+    choices=[
+        'MNIST',
+        'FashionMNIST',
+        'CIFAR10',
+        'CINIC10',
+        'CIFAR100',
+        'EMNIST',
+        'CHMNIST',
+        'TinyImageNet',
+        'RT_IOT2022'
+    ]
+)    
     parser.add_argument('-dtb', '--distribution',
                         choices=['iid', 'class-imbalanced_iid', 'non-iid', 'pat', 'imbalanced_pat'])
     parser.add_argument('-dirichlet_alpha', '--dirichlet_alpha', type=float,

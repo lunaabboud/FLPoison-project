@@ -1,0 +1,30 @@
+seed: 4, epochs: 20, algorithm: FedSGD, optimizer: SGD, momentum: 0.9, weight_decay: 0.0005, num_clients: 50, batch_size: 64, learning_rate: 0.01, model: mlp, dataset: RT_IOT2022, distribution: iid, im_iid_gamma: 0.01, tail_cls_from: 4, dirichlet_alpha: 0.5, cache_partition: False, gpu_idx: [0], num_workers: 0, record_time: False, num_adv: 10, attack: NoAttack, defense: Mean, attack_params: None, defense_params: None, benchmark: False, num_training_sample: 123117, num_channels: 82, num_classes: 12, num_features: 82, mean: None, std: None, device: cuda:0, output: ./logs/FedSGD/RT_IOT2022_mlp/iid/RT_IOT2022_mlp_iid_NoAttack_Mean_20_50_0.01_FedSGD.txt
+
+Started on Wed Aug  5 12:26:38 2026
+Generating new indices
+Doing iid partition
+iid partition finished
+Data partitioned
+Clients and server are initialized
+Starting Training...
+Epoch 0  		Train Acc: 0.7775	Train loss: 0.0375	Test Acc: 0.7868	Test loss: 0.0374
+Epoch 1  		Train Acc: 0.7806	Train loss: 0.0374	Test Acc: 0.7845	Test loss: 0.0372
+Epoch 2  		Train Acc: 0.7906	Train loss: 0.0371	Test Acc: 0.7814	Test loss: 0.0369
+Epoch 3  		Train Acc: 0.7803	Train loss: 0.0368	Test Acc: 0.7690	Test loss: 0.0364
+Epoch 4  		Train Acc: 0.7659	Train loss: 0.0364	Test Acc: 0.7689	Test loss: 0.0360
+Epoch 5  		Train Acc: 0.7784	Train loss: 0.0359	Test Acc: 0.7689	Test loss: 0.0354
+Epoch 6  		Train Acc: 0.7650	Train loss: 0.0354	Test Acc: 0.7689	Test loss: 0.0348
+Epoch 7  		Train Acc: 0.7656	Train loss: 0.0348	Test Acc: 0.7689	Test loss: 0.0341
+Epoch 8  		Train Acc: 0.7691	Train loss: 0.0341	Test Acc: 0.7688	Test loss: 0.0334
+Epoch 9  		Train Acc: 0.7725	Train loss: 0.0334	Test Acc: 0.7688	Test loss: 0.0327
+Epoch 10 		Train Acc: 0.7734	Train loss: 0.0326	Test Acc: 0.7688	Test loss: 0.0319
+Epoch 11 		Train Acc: 0.7741	Train loss: 0.0318	Test Acc: 0.7688	Test loss: 0.0311
+Epoch 12 		Train Acc: 0.7597	Train loss: 0.0312	Test Acc: 0.7688	Test loss: 0.0303
+Epoch 13 		Train Acc: 0.7653	Train loss: 0.0303	Test Acc: 0.7688	Test loss: 0.0294
+Epoch 14 		Train Acc: 0.7697	Train loss: 0.0294	Test Acc: 0.7688	Test loss: 0.0285
+Epoch 15 		Train Acc: 0.7734	Train loss: 0.0285	Test Acc: 0.7688	Test loss: 0.0276
+Epoch 16 		Train Acc: 0.7788	Train loss: 0.0275	Test Acc: 0.7688	Test loss: 0.0267
+Epoch 17 		Train Acc: 0.7647	Train loss: 0.0267	Test Acc: 0.7688	Test loss: 0.0258
+Epoch 18 		Train Acc: 0.7725	Train loss: 0.0257	Test Acc: 0.7688	Test loss: 0.0248
+Epoch 19 		Train Acc: 0.7725	Train loss: 0.0247	Test Acc: 0.7688	Test loss: 0.0238
+Training finished on Wed Aug  5 12:26:54 2026 using 0 minutes and 15 seconds in total.

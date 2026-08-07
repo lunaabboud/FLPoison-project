@@ -10,8 +10,19 @@ all_models = list(model_registry.keys())
 
 model_categories = {
     "grey": ["lr"],
-    "adaptive": ["lenet", "lenet_bn"],  # 1(grey) or 3(rgb) channels
-    "rgb": ["resnet18", "resnet34", "resnet50", "resnet101", "resnet152", "vgg11", "vgg13", "vgg16", "vgg19"],
+    "adaptive": ["lenet", "lenet_bn"],
+    "tabular": ["mlp"],
+    "rgb": [
+        "resnet18",
+        "resnet34",
+        "resnet50",
+        "resnet101",
+        "resnet152",
+        "vgg11",
+        "vgg13",
+        "vgg16",
+        "vgg19"
+    ],
     "handy": ["simplecnn"]
 }
 
@@ -28,6 +39,13 @@ def get_model(args):
     elif args.model in model_categories["adaptive"]:
         model = model_registry[args.model](
             num_channels=args.num_channels, num_classes=args.num_classes)
+
+    elif args.model in model_categories["tabular"]:
+
+        model = model_registry[args.model](
+            input_dim=args.num_features,
+            num_classes=args.num_classes
+        )
     elif args.model in model_categories["rgb"]:
         assert args.num_channels == 3, "models designed for RGB images only supports 3 channels"
         model = model_registry[args.model](num_classes=args.num_classes)

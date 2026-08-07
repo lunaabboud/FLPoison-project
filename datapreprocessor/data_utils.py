@@ -9,7 +9,7 @@ from datapreprocessor.cinic10 import CINIC10
 from datapreprocessor.chmnist import CHMNIST
 from plot_utils import plot_label_distribution
 from datapreprocessor.tinyimagenet import TinyImageNet
-
+from datapreprocessor.rtiot2022 import RT_IOT2022
 
 def load_data(args):
     # load dataset
@@ -25,7 +25,7 @@ def load_data(args):
                                                          download=True, transform=trans)
         test_dataset = eval(f"datasets.{args.dataset}")(root=data_directory, train=False,
                                                         download=True, transform=test_trans)
-    elif args.dataset in ["CHMNIST", "CINIC10", "TinyImageNet"]:
+    elif args.dataset in ["CHMNIST", "CINIC10", "TinyImageNet", "RT_IOT2022"]:
         """
         dataset in custom datasets, such as CHMNIST, CINIC10, TinyImageNet
         """
@@ -66,6 +66,14 @@ def get_transform(args):
         test_trans = train_tran
         # define the image dimensions for self.args, so that others can use it, such as DeepSight, lr model
         args.num_dims = 32
+    elif args.dataset == "RT_IOT2022":
+
+        # Tabular dataset: no image transforms required
+        train_tran = lambda x: x
+        test_trans = lambda x: x
+
+        # Number of input features (used by the MLP later)
+        args.num_dims = args.num_features
     elif args.dataset in ["CINIC10"]:
         train_tran = transforms.Compose(
             [transforms.ToTensor(), transforms.Normalize(mean=args.mean, std=args.std)])
@@ -187,33 +195,48 @@ class Partition(Dataset):
         self.indices = indices if indices is not None else range(len(dataset))
         self.data, self.targets = dataset.data[self.indices], dataset.targets[self.indices]
         # (N, C, H, W) or (N, H, W) for MNIST-like grey images, mode='L'; CIFAR10-like color images, mode='RGB'
-        self.mode = 'L' if len(self.data.shape) == 3 else 'RGB'
+        self.mode = None if len(self.data.shape) == 2 else (  'L' if len(self.data.shape) == 3 else 'RGB')
         self.transform = transform
         self.poison = False
 
     def __len__(self):
         return len(self.data)
 
+    def poison_setup(self, synthesizer):
+        self.poison = True
+        self.synthesizer = synthesizer
     def __getitem__(self, idx):
-        image, target = self.data[idx], self.targets[idx]
 
-        # doing this so that it is consistent with all other datasets
-        # convert image to numpy array. for MNIST-like dataset, image is torch tensor, for CIFAR10-like dataset, image type is numpy array.
-        if not isinstance(image, (np.ndarray, np.generic)):
-            image = image.numpy()
-        # to return a PIL Image
-        image = Image.fromarray(image, mode=self.mode)
+        sample, target = self.data[idx], self.targets[idx]
+
+        # -------------------------------------------------
+        # RT-IOT2022 (Tabular Dataset)
+        # -------------------------------------------------
+        if self.mode is None:
+
+            if not isinstance(sample, torch.Tensor):
+                sample = torch.tensor(sample, dtype=torch.float32)
+
+            return sample, target.squeeze()
+
+        # -------------------------------------------------
+        # Image Datasets
+        # -------------------------------------------------
+        if not isinstance(sample, (np.ndarray, np.generic)):
+            sample = sample.numpy()
+
+        image = Image.fromarray(sample, mode=self.mode)
+
         if self.transform:
             image = self.transform(image)
 
         if self.poison:
             image, target = self.synthesizer.backdoor_batch(
-                image, target.reshape(-1, 1))
-        return image, target.squeeze()
+                image,
+                target.reshape(-1, 1)
+            )
 
-    def poison_setup(self, synthesizer):
-        self.poison = True
-        self.synthesizer = synthesizer
+        return image, target.squeeze()
 
 
 def iid_partition(args, train_dataset):

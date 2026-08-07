@@ -65,6 +65,12 @@ def get_configs(dataset, algorithm, distribution, defense):
         "CHMNIST": {
             "FedSGD": {"epoch": 150, "lr": 0.001}
         },
+        "RT_IOT2022": {
+            "FedSGD": {
+                "epoch": 20,
+                "lr": 0.01
+            }
+        }
     }
 
     dataset_params = params.get(dataset, {})
