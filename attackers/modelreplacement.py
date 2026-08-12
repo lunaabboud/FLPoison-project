@@ -25,7 +25,7 @@ class ModelReplacement(MPBase, DPBase, Client):
         """
         self.default_attack_params = {
             'scaling_factor': 50, "alpha": 0.5, "attack_model": "all2one",
-            "poisoning_ratio": 0.32, "target_label": 6, "source_label": 3, "attack_strategy": "continuous", "single_epoch": 0, "poison_frequency": 5}
+            "poisoning_ratio": 0.32, "target_label": 3, "source_label": 1, "attack_strategy": "continuous", "single_epoch": 0, "poison_frequency": 5}
         self.update_and_set_attr()
 
         self.define_synthesizer()

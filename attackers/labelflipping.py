@@ -23,7 +23,8 @@ class LabelFlipping(DPBase, Client):
         self.default_attack_params = {
             'attack_model': 'targeted', 'source_label': 2, 'target_label': 7, "attack_strategy": "continuous", "single_epoch": 0, "poison_frequency": 5, "poisoning_ratio": 1}
         self.update_and_set_attr()
-
+        
+        #print(self.default_attack_params)
         self.define_synthesizer()
         poison_epochs = self.generate_poison_epochs(
             self.attack_strategy, self.args.epochs, self.single_epoch, self.poison_frequency)

@@ -75,6 +75,7 @@ TinyImageNet:
     num_dims: 64
     mean: (0.485, 0.456, 0.406)
     std: (0.229, 0.224, 0.225)
+
 RT_IOT2022:
     num_training_sample: 123117
     num_channels: 82
@@ -82,3 +83,10 @@ RT_IOT2022:
     num_features: 82
     mean: None
     std: None
+
+TumorDataset:
+    num_training_sample: 13927 # test sample 3961
+    num_channels: 3
+    num_classes: 4
+    mean: (0.485, 0.456, 0.406)
+    std: (0.229, 0.224, 0.225)

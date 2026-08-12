@@ -54,6 +54,7 @@ def read_args():
         'EMNIST',
         'CHMNIST',
         'TinyImageNet',
+        'TumorDataset',
         'RT_IOT2022'
     ]
 )    

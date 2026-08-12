@@ -27,7 +27,7 @@ class Neurotoxin(MPBase, DPBase, Client):
         norm_threshold: clipping threshold of gradient norm 
         """
         self.default_attack_params = {
-            'num_sample': 64, 'topk_ratio': 0.1, 'norm_threshold': 0.2, "attack_model": "all2one", "poisoning_ratio": 0.32, "target_label": 6, "source_label": 1, "attack_strategy": "continuous", "single_epoch": 0, "poison_frequency": 5}
+            'num_sample': 64, 'topk_ratio': 0.1, 'norm_threshold': 0.2, "attack_model": "all2one", "poisoning_ratio": 0.32, "target_label": 3, "source_label": 1, "attack_strategy": "continuous", "single_epoch": 0, "poison_frequency": 5}
 
         self.update_and_set_attr()
 

@@ -22,7 +22,7 @@ class BadNets(DPBase, Client):
         attack_strategy: ['single-shot', 'fixed-frequency','continuous']
         """
         self.default_attack_params = {
-            'trigger_size': 5, "attack_model": "all2one", "poisoning_ratio": 0.32, "target_label": 6, "source_label": 1, "attack_strategy": "continuous", "single_epoch": 0, "poison_frequency": 5, "attack_start_epoch": None}
+            'trigger_size': 5, "attack_model": "all2one", "poisoning_ratio": 0.32, "target_label": 3, "source_label": 1, "attack_strategy": "continuous", "single_epoch": 0, "poison_frequency": 5, "attack_start_epoch": None}
         self.update_and_set_attr()
         self.define_synthesizer()
         poison_epochs = self.generate_poison_epochs(

@@ -10,6 +10,7 @@ from datapreprocessor.chmnist import CHMNIST
 from plot_utils import plot_label_distribution
 from datapreprocessor.tinyimagenet import TinyImageNet
 from datapreprocessor.rtiot2022 import RT_IOT2022
+from datapreprocessor.tumor import TumorDataset
 
 def load_data(args):
     # load dataset
@@ -25,7 +26,7 @@ def load_data(args):
                                                          download=True, transform=trans)
         test_dataset = eval(f"datasets.{args.dataset}")(root=data_directory, train=False,
                                                         download=True, transform=test_trans)
-    elif args.dataset in ["CHMNIST", "CINIC10", "TinyImageNet", "RT_IOT2022"]:
+    elif args.dataset in ["CHMNIST", "CINIC10", "TinyImageNet", "RT_IOT2022","TumorDataset"]:
         """
         dataset in custom datasets, such as CHMNIST, CINIC10, TinyImageNet
         """
@@ -90,6 +91,26 @@ def get_transform(args):
         test_trans = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize(args.mean, args.std)
+        ])
+    elif args.dataset == "TumorDataset":
+        args.num_dims = 224
+
+        train_tran = transforms.Compose([
+            #transforms.Resize((32, 32)),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=args.mean,
+                std=args.std
+            )
+        ])
+
+        test_trans = transforms.Compose([
+            #transforms.Resize((32, 32)),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=args.mean,
+                std=args.std
+            )
         ])
     else:
         raise ValueError("Dataset not implemented yet")
