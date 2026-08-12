@@ -7,24 +7,22 @@ from torch.utils.data import Dataset
 
 class TumorDataset(Dataset):
     """
-    Dataset supporting both:
+    TUMOR4 Brain MRI Dataset
 
-        TUMOR4:
-            (3, 32, 32)
-
-        TUMOR4:
-            (3, 128, 128)
+    Expected image format:
+        (3, 32, 32)
 
     Pickle format:
-
         {
             'data': [...],
             'labels': [...]
         }
 
     Internally, images are stored as:
+        (N, 32, 32, 3)
 
-        (N, H, W, 3)
+    Returned by __getitem__:
+        (3, 32, 32)
     """
 
     def __init__(
@@ -46,12 +44,10 @@ class TumorDataset(Dataset):
         if train:
             filenames = [
                 "tumor4train.pkl"
-                #"tumor4_train.pkl"
             ]
         else:
             filenames = [
                 "tumor4test.pkl"
-                #"tumor4_test.pkl"
             ]
 
         # -------------------------------------------------
@@ -93,7 +89,6 @@ class TumorDataset(Dataset):
                 )
 
             data = np.asarray(dataset["data"])
-
             labels = np.asarray(dataset["labels"])
 
             # -------------------------------------------------
@@ -110,11 +105,11 @@ class TumorDataset(Dataset):
             # -------------------------------------------------
             # Validate image dimensions
             #
-            # Supports:
+            # Expected:
+            #     N x 3 x 32 x 32
             #
-            #     N x H x W x 3
-            #
-            # where H and W can be 32 or 128.
+            # or:
+            #     N x 32 x 32 x 3
             # -------------------------------------------------
 
             if data.ndim != 4:
@@ -126,19 +121,19 @@ class TumorDataset(Dataset):
             # -------------------------------------------------
             # Handle CHW format:
             #
-            #     N x 3 x H x W
+            #     N x 3 x 32 x 32
             #
             # Convert to:
             #
-            #     N x H x W x 3
+            #     N x 32 x 32 x 3
             # -------------------------------------------------
 
             if data.shape[1] == 3:
 
-                if data.shape[2] != data.shape[3]:
+                if data.shape[2] != 32 or data.shape[3] != 32:
                     raise ValueError(
-                        f"{filename}: expected square images, "
-                        f"but got {data.shape}."
+                        f"{filename}: expected images of size "
+                        f"(3, 32, 32), but got {data.shape[1:]}."
                     )
 
                 data = np.transpose(
@@ -147,29 +142,36 @@ class TumorDataset(Dataset):
                 )
 
             # -------------------------------------------------
-            # Now data should be:
+            # Handle HWC format:
             #
-            #     N x H x W x 3
-            #
+            #     N x 32 x 32 x 3
             # -------------------------------------------------
 
-            if data.shape[3] != 3:
+            elif (
+                data.shape[1] == 32
+                and data.shape[2] == 32
+                and data.shape[3] == 3
+            ):
+                pass
+
+            else:
                 raise ValueError(
-                    f"{filename}: expected 3 channels, "
-                    f"but got shape {data.shape}."
+                    f"{filename}: expected images with shape "
+                    f"(3, 32, 32) or (32, 32, 3), "
+                    f"but got {data.shape}."
                 )
 
-            if data.shape[1] != data.shape[2]:
-                raise ValueError(
-                    f"{filename}: expected square images, "
-                    f"but got {data.shape[1:3]}."
-                )
+            # -------------------------------------------------
+            # Final validation
+            #
+            # Internally:
+            #     N x 32 x 32 x 3
+            # -------------------------------------------------
 
-            if data.shape[1] not in [32, 128]:
+            if data.shape[1:] != (32, 32, 3):
                 raise ValueError(
-                    f"{filename}: supported image sizes are "
-                    f"32x32 or 128x128, but got "
-                    f"{data.shape[1]}x{data.shape[2]}."
+                    f"{filename}: final image shape must be "
+                    f"(32, 32, 3), but got {data.shape[1:]}."
                 )
 
             all_data.append(data)
@@ -179,15 +181,24 @@ class TumorDataset(Dataset):
         # Combine data
         # -------------------------------------------------
 
-        self.data = np.concatenate(all_data,axis=0)
+        self.data = np.concatenate(
+            all_data,
+            axis=0
+        )
 
-        self.targets = np.concatenate(all_labels,axis=0)
+        self.targets = np.concatenate(
+            all_labels,
+            axis=0
+        )
 
         # -------------------------------------------------
         # Convert labels to tensor
         # -------------------------------------------------
 
-        self.targets = torch.tensor(self.targets, dtype=torch.long)
+        self.targets = torch.tensor(
+            self.targets,
+            dtype=torch.long
+        )
 
         # -------------------------------------------------
         # Normalize label numbering
@@ -245,8 +256,11 @@ class TumorDataset(Dataset):
 
         self.num_channels = 3
 
-        # Detect image size automatically
-        self.num_dims = self.data.shape[1]
+        # -------------------------------------------------
+        # FIXED IMAGE SIZE
+        # -------------------------------------------------
+
+        self.num_dims = 32
 
         print(
             f"TumorDataset: "
@@ -270,9 +284,6 @@ class TumorDataset(Dataset):
         #
         # x:
         #     (32, 32, 3)
-        #
-        # or:
-        #     (128, 128, 3)
         # -------------------------------------------------
 
         x = self.data[index]
@@ -297,17 +308,11 @@ class TumorDataset(Dataset):
         #
         # ToTensor converts:
         #
-        #     (H, W, 3)
+        #     (32, 32, 3)
         #
         # to:
         #
-        #     (3, H, W)
-        #
-        # Therefore:
-        #
-        #     32x32 -> 3x32x32
-        #
-        #     128x128 -> 3x128x128
+        #     (3, 32, 32)
         # -------------------------------------------------
 
         if self.transform:
@@ -323,5 +328,15 @@ class TumorDataset(Dataset):
                 0,
                 1
             ).float() / 255.0
+
+        # -------------------------------------------------
+        # Final size check
+        # -------------------------------------------------
+
+        if x.shape != (3, 32, 32):
+            raise ValueError(
+                f"Expected image shape (3, 32, 32), "
+                f"but got {tuple(x.shape)}."
+            )
 
         return x, y

@@ -28,7 +28,7 @@ num_adv: 0.48 # the proportion (float < 1) or number (int>1) of adversaries
 
 #Data Poisoning: Neurotoxin, ModelReplacement, AlterMin, DBA, BadNets, LabelFlipping #Not working: EdgeCase
 # Model Poisioning: HIDRA, Mimic, FangAttack, IPM, SignFlipping, Gaussian # Not working:ALIE
-attack: Neurotoxin
+attack: IPM
 defense: Mean
 
 attacks:

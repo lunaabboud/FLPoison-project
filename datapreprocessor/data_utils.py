@@ -93,7 +93,7 @@ def get_transform(args):
             transforms.Normalize(args.mean, args.std)
         ])
     elif args.dataset == "TumorDataset":
-        args.num_dims = 224
+        args.num_dims = 32
 
         train_tran = transforms.Compose([
             #transforms.Resize((32, 32)),
